@@ -1,12 +1,15 @@
-/** Snack or Booze main application.
- *
- * Props: (none)
- *
- * State:
- * - snacks: list of snack data objs -- populated via AJAX call
- * - drinks: same, but for drinks
- * - isLoading: bool, has data loaded yet?
- *
+/** Snack or Booze main application:
+This project includes a node library: json-server, which creates a 
+straightforward fully-featured JSON REST API from a JSON file.
+The JSON file can be updated when changes are made via POST/PATCH/DELETE.
+
+Two APIs are created, one for creating new data and for loading the data.
+Then the state is passed down to other components where it can be used via props.
+
+State:
+- snacks: list of snack data objs -- populated via AJAX call
+- drinks: same, but for drinks
+- isLoading: bool, has data loaded yet?
  */
 
 import React, { Component } from "react";
@@ -32,7 +35,7 @@ class App extends Component {
     this.addItem = this.addItem.bind(this);
   }
 
-  /** Load data from backend. */
+  // Load data from backend.
 
   async componentDidMount() {
     let snacks = await fetchItems("snacks");
@@ -40,7 +43,7 @@ class App extends Component {
     this.setState({ snacks, drinks, isLoading: false });
   }
 
-  /** Call API to add item of type "snacks" or "drinks"; update state */
+  // Call API to add item of type "snacks" or "drinks"; update state.
 
   async addItem(type, { name, description, recipe, serve }) {
     let id = slugify(name, { lower: true });
@@ -48,14 +51,13 @@ class App extends Component {
     console.log(this.state);
     await addItem(type, objData);
     this.setState(st => ({
-      // in the state we have two types of array (snacks and drinks)
-      // we are spreding the array that we need and adding new object
+      // in the state there are two types of array (snacks and drinks)
+      // spreding the array and adding new object
       [type]: [...st[type], objData]
     }));
   }
 
-  /** Show app frame, navbar, and routes */
-
+  // Show app frame, navbar, and routes
   render() {
     let { snacks, drinks } = this.state;
 
